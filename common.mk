@@ -10,6 +10,11 @@ ifeq ($(TARGET_USES_POST_PROCESSING),true)
     common_includes += $(TARGET_OUT_HEADERS)/pp/inc
 endif
 
+#TODO
+#ifeq ($(call is-vendor-board-platform,QCOM),true)
+ifeq ($(TARGET_BOARD_PLATFORM), msm8960)
+    common_flags += -DUSE_FENCE_SYNC
+endif
 
 #Common libraries external to display HAL
 common_libs := liblog libutils libcutils libhardware
