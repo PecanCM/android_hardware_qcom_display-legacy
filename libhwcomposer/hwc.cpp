@@ -149,48 +149,23 @@ static int hwc_eventControl(struct hwc_composer_device_1* dev, int dpy,
                              int event, int enabled)
 {
     int ret = 0;
-    static int prev_value, temp;
 
     hwc_context_t* ctx = (hwc_context_t*)(dev);
     private_module_t* m = reinterpret_cast<private_module_t*>(
                 ctx->mFbDev->common.module);
     switch(event) {
         case HWC_EVENT_VSYNC:
-            if (enabled == prev_value){
-                //TODO see why HWC gets repeated events
-                ALOGD_IF(VSYNC_DEBUG, "%s - VSYNC is already %s",
-                        __FUNCTION__, (enabled)?"ENABLED":"DISABLED");
-            }
-            temp = ctx->vstate.enable;
-#ifndef TARGET_MSM7x27
-            if(ioctl(m->framebuffer->fd, MSMFB_OVERLAY_VSYNC_CTRL, &enabled) < 0)
-                ret = -errno;
-#endif
-            /* vsync state change logic */
-            if (enabled == 1) {
-                //unblock vsync thread
-                pthread_mutex_lock(&ctx->vstate.lock);
-                ctx->vstate.enable = true;
-                pthread_cond_signal(&ctx->vstate.cond);
-                pthread_mutex_unlock(&ctx->vstate.lock);
-            }
-            if (enabled == 0 && temp) {
-                //vsync thread will block
-                pthread_mutex_lock(&ctx->vstate.lock);
-                ctx->vstate.enable = false;
-                pthread_mutex_unlock(&ctx->vstate.lock);
-            }
-            ALOGD_IF (VSYNC_DEBUG, "VSYNC state changed from %s to %s",
-              (prev_value)?"ENABLED":"DISABLED", (enabled)?"ENABLED":"DISABLED");
-            prev_value = enabled;
-            /* vsync state change logic - end*/
+            if (ctx->vstate.enable == value)
+                break;
 
-            if(ctx->mExtDisplay->isHDMIConfigured() &&
-                 (ctx->mExtDisplay->getExternalDisplay()==EXTERN_DISPLAY_FB1)) {
-                // enableHDMIVsync will return -errno on error
-                ret = ctx->mExtDisplay->enableHDMIVsync(enabled);
-             }
-           break;
+            pthread_mutex_lock(&ctx->vstate.lock);
+            ctx->vstate.enable = !!value;
+            pthread_cond_signal(&ctx->vstate.cond);
+
+            ALOGD_IF (VSYNC_DEBUG, "VSYNC state changed to %s",
+                                           (value)?"ENABLED":"DISABLED");
+            pthread_mutex_unlock(&ctx->vstate.lock);
+            break;
         default:
             ret = -EINVAL;
     }
