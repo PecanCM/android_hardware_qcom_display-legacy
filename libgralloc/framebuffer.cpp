@@ -308,7 +308,13 @@ int mapFrameBufferLocked(struct private_module_t* module)
     float xdpi = (info.xres * 25.4f) / info.width;
     float ydpi = (info.yres * 25.4f) / info.height;
     //The reserved[3] field is used to store FPS by the driver.
+#ifndef REFRESH_RATE
     float fps  = info.reserved[3];
+#else
+    float fps = REFRESH_RATE;
+#warning "refresh rate set via makefile to REFRESH_RATE"
+#endif
+
 
     ALOGI("using (fd=%d)\n"
           "id           = %s\n"
@@ -368,7 +374,11 @@ int mapFrameBufferLocked(struct private_module_t* module)
     size_t fbSize = roundUpToPageSize(finfo.line_length * info.yres)*
                     module->numBuffers;
     module->framebuffer = new private_handle_t(fd, fbSize,
+#ifdef USE_ION
+                                        private_handle_t::PRIV_FLAGS_USES_ION,
+#else
                                         private_handle_t::PRIV_FLAGS_USES_PMEM,
+#endif
                                         BUFFER_TYPE_UI,
                                         module->fbFormat, info.xres, info.yres);
     void* vaddr = mmap(0, fbSize, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
