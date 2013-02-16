@@ -22,6 +22,10 @@ LOCAL_SRC_FILES               := hwc.cpp          \
                                  hwc_mdpcomp.cpp  \
                                  hwc_extonly.cpp
 
+ifeq ($(TARGET_BOARD_PLATFORM),msm7x27)
+    LOCAL_CFLAGS += -DTARGET_7x27
+endif
+
 include $(BUILD_SHARED_LIBRARY)
 
 #libhwcexternal library
