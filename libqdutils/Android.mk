@@ -11,6 +11,6 @@ LOCAL_C_INCLUDES              += $(TOP)/hardware/qcom/display-legacy/libgralloc
 LOCAL_CFLAGS                  := $(common_flags)
 LOCAL_ADDITIONAL_DEPENDENCIES := $(common_deps)
 LOCAL_SRC_FILES               := profiler.cpp mdp_version.cpp \
-                                 idle_invalidator.cpp egl_handles.cpp \
-                                 cb_utils.cpp
+                                 soc_id.cpp idle_invalidator.cpp \
+                                 egl_handles.cpp cb_utils.cpp
 include $(BUILD_SHARED_LIBRARY)
