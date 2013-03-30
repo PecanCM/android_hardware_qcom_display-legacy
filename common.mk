@@ -23,7 +23,7 @@ ifeq ($(TARGET_USES_ION),true)
 endif
 
 ifeq ($(ARCH_ARM_HAVE_NEON),true)
-#    common_flags += -D__ARM_HAVE_NEON
+    common_flags += -D__ARM_HAVE_NEON
 endif
 
 ifeq ($(TARGET_NO_HW_VSYNC),true)
