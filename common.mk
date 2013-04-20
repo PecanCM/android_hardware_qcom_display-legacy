@@ -28,3 +28,7 @@ endif
 ifeq ($(TARGET_NO_HW_VSYNC),true)
     common_flags += -DNO_HW_VSYNC
 endif
+
+ifeq ($(TARGET_BOARD_PLATFORM),msm7x27)
+    LOCAL_CFLAGS += -DTARGET_MSM7x27
+endif
