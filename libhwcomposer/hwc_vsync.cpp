@@ -82,6 +82,7 @@ static void *vsync_loop(void *param)
            fb1_vsync = false;
         }
 
+#ifndef TARGET_MSM7x27
         pthread_mutex_lock(&ctx->vstate.lock);
         while (ctx->vstate.enable == false) {
             if(enabled) {
@@ -114,7 +115,7 @@ static void *vsync_loop(void *param)
             }
             enabled = true;
         }
-
+#endif
         // try to open timestamp sysfs
         if (fb1_vsync){
             fd_timestamp = open(vsync_timestamp_fb1, O_RDONLY);
