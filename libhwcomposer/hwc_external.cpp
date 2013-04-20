@@ -556,7 +556,7 @@ bool ExternalDisplay::commit()
 int ExternalDisplay::enableHDMIVsync(int enable)
 {
     int ret = 0;
-#ifndef NO_HW_VSYNC
+#ifndef TARGET_MSM7x27
     if(mFd > 0) {
         int ret = ioctl(mFd, MSMFB_OVERLAY_VSYNC_CTRL, &enable);
         if (ret<0) {
