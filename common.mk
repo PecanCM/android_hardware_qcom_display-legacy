@@ -31,5 +31,5 @@ ifeq ($(TARGET_NO_HW_VSYNC),true)
 endif
 
 ifeq ($(TARGET_BOARD_PLATFORM),msm7x27)
-   common_flags += -DTARGET_7x27
+   common_flags += -DTARGET_MSM7x27
 endif

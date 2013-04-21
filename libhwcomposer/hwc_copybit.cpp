@@ -454,7 +454,7 @@ int  CopyBit::drawLayerUsingCopybit(hwc_context_t *dev, hwc_layer_1_t *layer,
                                               layerTransform);
     //TODO: once, we are able to read layer alpha, update this
     copybit->set_parameter(copybit, COPYBIT_PLANE_ALPHA, 255);
-#ifndef TARGET_7x27
+#ifndef TARGET_MSM7x27
     copybit->set_parameter(copybit, COPYBIT_PREMULTIPLIED_ALPHA,
                       (layer->blending == HWC_BLENDING_PREMULT)?
                                              COPYBIT_ENABLE : COPYBIT_DISABLE);

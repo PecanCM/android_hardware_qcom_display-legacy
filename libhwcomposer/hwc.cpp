@@ -162,7 +162,7 @@ static int hwc_eventControl(struct hwc_composer_device_1* dev, int dpy,
                         __FUNCTION__, (enabled)?"ENABLED":"DISABLED");
             }
             temp = ctx->vstate.enable;
-#ifndef NO_HW_VSYNC
+#ifndef TARGET_MSM7x27
             if(ioctl(m->framebuffer->fd, MSMFB_OVERLAY_VSYNC_CTRL, &enabled) < 0)
                 ret = -errno;
 #endif
