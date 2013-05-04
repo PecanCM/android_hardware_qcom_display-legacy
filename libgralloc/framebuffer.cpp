@@ -271,7 +271,7 @@ int mapFrameBufferLocked(struct private_module_t* module)
     uint32_t line_length = (info.xres * info.bits_per_pixel / 8);
     info.yres_virtual = (size * numberOfBuffers) / line_length;
 
-#ifndef TARGET_MSM7x27
+#if !defined(NO_HW_VSYNC) && defined(MSMFB_METADATA_SET)
     struct msmfb_metadata metadata;
 
     metadata.op = metadata_op_base_blend;
