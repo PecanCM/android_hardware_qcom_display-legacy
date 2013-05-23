@@ -155,15 +155,15 @@ static int hwc_eventControl(struct hwc_composer_device_1* dev, int dpy,
                 ctx->mFbDev->common.module);
     switch(event) {
         case HWC_EVENT_VSYNC:
-            if (ctx->vstate.enable == value)
+            if (ctx->vstate.enable == enabled)
                 break;
 
             pthread_mutex_lock(&ctx->vstate.lock);
-            ctx->vstate.enable = !!value;
+            ctx->vstate.enable = !!enabled;
             pthread_cond_signal(&ctx->vstate.cond);
 
             ALOGD_IF (VSYNC_DEBUG, "VSYNC state changed to %s",
-                                           (value)?"ENABLED":"DISABLED");
+                                           (enabled)?"ENABLED":"DISABLED");
             pthread_mutex_unlock(&ctx->vstate.lock);
             break;
         default:
@@ -278,7 +278,9 @@ static int hwc_device_open(const struct hw_module_t* module, const char* name,
 
         dev->device.common.tag     = HARDWARE_DEVICE_TAG;
 #ifdef NO_HW_VSYNC
-        ALOGI("%s: Faking Hardware VSYNC", __FUNCTION__);
+        ALOGI("%s: Faking hardware VSYNC", __FUNCTION__);
+#else
+        ALOGI("%s: Hardware VSYNC supported", __FUNCTION__);
 #endif
         dev->device.common.version = HWC_DEVICE_API_VERSION_1_0;
         dev->device.common.module  = const_cast<hw_module_t*>(module);
