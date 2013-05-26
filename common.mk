@@ -12,7 +12,7 @@ endif
 
 #TODO
 #ifeq ($(call is-vendor-board-platform,QCOM),true)
-ifeq ($(TARGET_USES_FENCE_SYNC),true)
+ifeq ($(TARGET_USES_HWC_FENCE_SYNC),true)
     common_flags += -DUSE_FENCE_SYNC
 endif
 
